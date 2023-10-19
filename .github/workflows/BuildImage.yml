@@ -3,7 +3,7 @@ name: Build Image
 on: [push, pull_request, workflow_dispatch]
 
 env:
-  ENDPOINT: "user/endpoint"
+  ENDPOINT: "pepperrice/queue-cleanarr"
   BRANCH: "master"
 
 jobs:
@@ -49,13 +49,13 @@ jobs:
           docker push ghcr.io/${ENDPOINT}:${{ github.sha }}
           docker push ghcr.io/${ENDPOINT}
 
-      - name: Login to DockerHub
-        if: ${{ github.ref == format('refs/heads/{0}', env.BRANCH) && env.DOCKERUSER && env.DOCKERPASS && env.ENDPOINT != 'user/endpoint' }}
-        run: |
-          echo ${{ secrets.DOCKERPASS }} | docker login -u ${{ secrets.DOCKERUSER }} --password-stdin
+      # - name: Login to DockerHub
+      #   if: ${{ github.ref == format('refs/heads/{0}', env.BRANCH) && env.DOCKERUSER && env.DOCKERPASS && env.ENDPOINT != 'user/endpoint' }}
+      #   run: |
+      #     echo ${{ secrets.DOCKERPASS }} | docker login -u ${{ secrets.DOCKERUSER }} --password-stdin
 
-      - name: Push tags to DockerHub
-        if: ${{ github.ref == format('refs/heads/{0}', env.BRANCH) && env.DOCKERUSER && env.DOCKERPASS && env.ENDPOINT != 'user/endpoint' }}
-        run: |
-          docker push ${ENDPOINT}:${{ github.sha }}
-          docker push ${ENDPOINT}
+      # - name: Push tags to DockerHub
+      #   if: ${{ github.ref == format('refs/heads/{0}', env.BRANCH) && env.DOCKERUSER && env.DOCKERPASS && env.ENDPOINT != 'user/endpoint' }}
+      #   run: |
+      #     docker push ${ENDPOINT}:${{ github.sha }}
+      #     docker push ${ENDPOINT}
