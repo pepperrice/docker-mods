@@ -10,7 +10,7 @@ def get_api_key(config_path):
 
     # get api key and port
     api_key = root.find('ApiKey').text
-    port = root.find('port').text
+    port = root.find('Port').text
     return api_key, port 
 
 def delete_unimported_downloads(api_key, port):
