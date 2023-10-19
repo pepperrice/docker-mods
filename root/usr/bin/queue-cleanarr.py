@@ -15,7 +15,7 @@ def get_api_key(config_path):
 
 def delete_unimported_downloads(api_key, port):
     # URL to arr
-    url = f"http://localhost{port}:/api/v3"
+    url = f"http://localhost:{port}:/api/v3"
 
     headers = {
         "X-Api-Key": api_key
