@@ -3,7 +3,7 @@ import time
 import xml.etree.ElementTree as ET
 import argparse
 
-def get_api_key(config_path):
+def read_conf_file(config_path):
     # read XML
     tree = ET.parse(config_path)
     root = tree.getroot()
@@ -13,10 +13,7 @@ def get_api_key(config_path):
     port = root.find('Port').text
     return api_key, port 
 
-def delete_unimported_downloads(api_key, port):
-    # URL to arr
-    url = f"http://localhost:{port}/api/v3"
-
+def delete_unimported_downloads(api_key, url):
     headers = {
         "X-Api-Key": api_key
     }
@@ -40,21 +37,34 @@ def delete_unimported_downloads(api_key, port):
     else:
         print(f"Error getting API: {response.status_code}")
 
+parser = argparse.ArgumentParser(description='Remove stuck items from Sonarr/Radarr.')
+parser.add_argument('--config', type=str, help='Path to Sonarr/Radarr conf')
+parser.add_argument('--interval', type=int, default=1800, help='Waiting interval')
+parser.add_argument("-o", "--oneshot", action="store_true", help='Run once')
+parser.add_argument("-u", "--url", type=str, help='URL to Sonarr/Radarr "http//:sonarr:8989", required if --config is not set')
+parser.add_argument("-a", "--apikey", type=str, help='The API key, required if --config is not set')
+args = parser.parse_args()
 
-def main(config_path, interval):
-    while True:
-        api_key,port = get_api_key(config_path)
-        delete_unimported_downloads(api_key, port)
+if not any([args.url, args.apikey, args.config]):
+    raise Exception("--config, --apikey and --url not Set")
 
-        # wait
-        time.sleep(interval)
-        
+if args.url:
+    url = f"{args.url}/api/v3"
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Remove stuck items from Sonarr/Radarr.')
-    parser.add_argument('--config', type=str, required=True, help='Path to Sonarr/Radarr conf')
-    parser.add_argument('--interval', type=int, required=True, help='Waiting interval')
+if args.apikey:
+    api_key = args.apikey
+
+while True:
+    if args.config:
+        api_key,port = read_conf_file(args.config)
+        url = f"http://localhost:{port}/api/v3"
+
+    delete_unimported_downloads(api_key, url)
     
-    args = parser.parse_args()
-
-    main(args.config, args.interval)
+    # run once if oneshot
+    if args.oneshot:
+        print("oneshot set only run once")
+        break
+    
+    # wait
+    time.sleep(args.interval)
