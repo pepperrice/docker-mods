@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bash
+
+## Ubuntu
+if [ -f /usr/bin/apt ]; then
+    echo "\
+        python3 \
+        python3-pip" >> /mod-repo-packages-to-install.list
+    echo "requests" >> /mod-pip-packages-to-install.list
+fi
+# Alpine
+if [ -f /sbin/apk ]; then
+    echo "\
+        py3-pip \
+        python3" >> /mod-repo-packages-to-install.list
+    echo "requests" >> /mod-pip-packages-to-install.list
+fi
