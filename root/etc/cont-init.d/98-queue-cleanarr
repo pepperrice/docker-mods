@@ -1,20 +1,20 @@
 #!/usr/bin/with-contenv bash
 
-if [ -f /usr/bin/apt ]; then
-  ## Ubuntu
-  apt-get update
-  apt-get install --no-install-recommends -y \
-    python3 \
-    python3-pip 
-  pip install requests
-fi
-if [ -f /sbin/apk ]; then
-  # Alpine
-  apk add --no-cache \
-    py3-pip \
-    python3 
-  pip install requests
-fi
+# if [ -f /usr/bin/apt ]; then
+#   ## Ubuntu
+#   apt-get update
+#   apt-get install --no-install-recommends -y \
+#     python3 \
+#     python3-pip 
+#   pip install requests
+# fi
+# if [ -f /sbin/apk ]; then
+#   # Alpine
+#   apk add --no-cache \
+#     py3-pip \
+#     python3 
+#   pip install requests
+# fi
 
-chown -R root:root /root
-chmod -R 600 /root/.ssh
+# chown -R root:root /root
+# chmod -R 600 /root/.ssh
