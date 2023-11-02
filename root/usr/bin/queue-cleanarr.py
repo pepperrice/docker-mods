@@ -18,7 +18,11 @@ def delete_unimported_downloads(api_key, url):
         "X-Api-Key": api_key
     }
 
-    response = requests.get(f"{url}/queue?page=1&pageSize=200&includeUnknownSeriesItems=true&includeSeries=true&includeEpisode=true", headers=headers)
+    try:
+        response = requests.get(f"{url}/queue?page=1&pageSize=200&includeUnknownSeriesItems=true&includeSeries=true&includeEpisode=true", headers=headers)
+    except requests.exceptions.RequestException as e:
+        print(e)
+        return
 
     # check responsecode 
     if response.status_code == 200:
