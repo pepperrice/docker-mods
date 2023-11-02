@@ -58,6 +58,8 @@ if args.url:
 if args.apikey:
     api_key = args.apikey
 
+time.sleep(60)
+
 while True:
     if args.config:
         api_key,port = read_conf_file(args.config)
